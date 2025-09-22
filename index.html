@@ -2,59 +2,60 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Барахолка | Главное меню</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Барахолка</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    /* Можно чуть подправить цвета под твоё */
+    .btn-main {
+      @apply w-full py-4 rounded-lg text-white font-semibold shadow-lg transition-colors;
+    }
+  </style>
 </head>
-<body class="bg-gray-100">
-  <div id="app" class="max-w-md mx-auto p-4">
-    <h1 class="text-2xl font-bold text-center mb-6">Барахолка</h1>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white rounded-3xl shadow-xl w-full max-w-md p-6">
+    <h1 class="text-3xl font-bold text-center mb-8">БАРАХОЛКА</h1>
 
-    <!-- Главное меню -->
-    <div class="grid gap-4">
-      <button onclick="openPage('ads')" class="bg-blue-500 text-white py-3 rounded-xl shadow">
-        🛒 Объявления
-      </button>
-      <button onclick="openPage('exchange')" class="bg-green-500 text-white py-3 rounded-xl shadow">
-        🔄 Обменник
-      </button>
-      <button onclick="openPage('profile')" class="bg-purple-500 text-white py-3 rounded-xl shadow">
-        👤 Профиль
-      </button>
+    <div class="space-y-4">
+      <button onclick="openPage('ads')" class="btn-main bg-blue-500 hover:bg-blue-600">🛒 Объявления</button>
+      <button onclick="openPage('exchange')" class="btn-main bg-green-500 hover:bg-green-600">🔄 Обменник</button>
+      <button onclick="openPage('profile')" class="btn-main bg-purple-500 hover:bg-purple-600">👤 Профиль</button>
+      <!-- Можно добавить ещё кнопку, если нужен раздел ещё -->
     </div>
 
-    <!-- Страницы -->
-    <div id="page-ads" class="hidden mt-6">
-      <h2 class="text-xl font-semibold">🛒 Объявления</h2>
-      <p class="text-gray-600">Здесь будут объявления.</p>
-      <button onclick="goHome()" class="mt-4 bg-gray-300 py-2 px-4 rounded-lg">⬅ Назад</button>
+    <!-- Пустые страницы -->
+    <div id="page-ads" class="hidden mt-8">
+      <h2 class="text-2xl font-bold mb-4">🛒 Объявления</h2>
+      <p>Здесь будут объявления с фильтрацией.</p>
+      <button onclick="goHome()" class="mt-6 w-full py-3 bg-gray-200 rounded-lg">⬅ Назад</button>
     </div>
 
-    <div id="page-exchange" class="hidden mt-6">
-      <h2 class="text-xl font-semibold">🔄 Обменник</h2>
-      <p class="text-gray-600">Здесь будет обменник.</p>
-      <button onclick="goHome()" class="mt-4 bg-gray-300 py-2 px-4 rounded-lg">⬅ Назад</button>
+    <div id="page-exchange" class="hidden mt-8">
+      <h2 class="text-2xl font-bold mb-4">🔄 Обменник</h2>
+      <p>Функционал обмена товарами / валютами.</p>
+      <button onclick="goHome()" class="mt-6 w-full py-3 bg-gray-200 rounded-lg">⬅ Назад</button>
     </div>
 
-    <div id="page-profile" class="hidden mt-6">
-      <h2 class="text-xl font-semibold">👤 Профиль</h2>
-      <p class="text-gray-600">Здесь будет профиль пользователя.</p>
-      <button onclick="goHome()" class="mt-4 bg-gray-300 py-2 px-4 rounded-lg">⬅ Назад</button>
+    <div id="page-profile" class="hidden mt-8">
+      <h2 class="text-2xl font-bold mb-4">👤 Профиль</h2>
+      <p>Информация о пользователе, контакт, отзывы.</p>
+      <button onclick="goHome()" class="mt-6 w-full py-3 bg-gray-200 rounded-lg">⬅ Назад</button>
     </div>
   </div>
 
   <script>
-    const app = document.getElementById("app");
-    const pages = ["ads", "exchange", "profile"];
+    const pages = ['ads', 'exchange', 'profile'];
 
     function openPage(name) {
-      app.querySelectorAll("div[id^='page-']").forEach(el => el.classList.add("hidden"));
-      document.getElementById(`page-${name}`).classList.remove("hidden");
+      pages.forEach(p => {
+        const el = document.getElementById(`page-${p}`);
+        if (p === name) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+      });
     }
 
     function goHome() {
-      app.querySelectorAll("div[id^='page-']").forEach(el => el.classList.add("hidden"));
+      pages.forEach(p => document.getElementById(`page-${p}`).classList.add('hidden'));
     }
   </script>
 </body>
