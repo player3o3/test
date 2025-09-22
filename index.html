@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Барахолка | Главное меню</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body class="bg-gray-100">
+  <div id="app" class="max-w-md mx-auto p-4">
+    <h1 class="text-2xl font-bold text-center mb-6">Барахолка</h1>
+
+    <!-- Главное меню -->
+    <div class="grid gap-4">
+      <button onclick="openPage('ads')" class="bg-blue-500 text-white py-3 rounded-xl shadow">
+        🛒 Объявления
+      </button>
+      <button onclick="openPage('exchange')" class="bg-green-500 text-white py-3 rounded-xl shadow">
+        🔄 Обменник
+      </button>
+      <button onclick="openPage('profile')" class="bg-purple-500 text-white py-3 rounded-xl shadow">
+        👤 Профиль
+      </button>
+    </div>
+
+    <!-- Страницы -->
+    <div id="page-ads" class="hidden mt-6">
+      <h2 class="text-xl font-semibold">🛒 Объявления</h2>
+      <p class="text-gray-600">Здесь будут объявления.</p>
+      <button onclick="goHome()" class="mt-4 bg-gray-300 py-2 px-4 rounded-lg">⬅ Назад</button>
+    </div>
+
+    <div id="page-exchange" class="hidden mt-6">
+      <h2 class="text-xl font-semibold">🔄 Обменник</h2>
+      <p class="text-gray-600">Здесь будет обменник.</p>
+      <button onclick="goHome()" class="mt-4 bg-gray-300 py-2 px-4 rounded-lg">⬅ Назад</button>
+    </div>
+
+    <div id="page-profile" class="hidden mt-6">
+      <h2 class="text-xl font-semibold">👤 Профиль</h2>
+      <p class="text-gray-600">Здесь будет профиль пользователя.</p>
+      <button onclick="goHome()" class="mt-4 bg-gray-300 py-2 px-4 rounded-lg">⬅ Назад</button>
+    </div>
+  </div>
+
+  <script>
+    const app = document.getElementById("app");
+    const pages = ["ads", "exchange", "profile"];
+
+    function openPage(name) {
+      app.querySelectorAll("div[id^='page-']").forEach(el => el.classList.add("hidden"));
+      document.getElementById(`page-${name}`).classList.remove("hidden");
+    }
+
+    function goHome() {
+      app.querySelectorAll("div[id^='page-']").forEach(el => el.classList.add("hidden"));
+    }
+  </script>
+</body>
+</html>
