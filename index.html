@@ -1,94 +1,91 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AntiScam.net v0.5</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #1e1e1e; /* темная тема */
-            color: #ffffff;
-        }
-        .header {
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            border-bottom: 1px solid #333;
-        }
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #555;
-        }
-        .profile-info {
-            display: flex;
-            flex-direction: column;
-        }
-        .menu {
-            display: flex;
-            justify-content: space-around;
-            padding: 15px;
-            border-bottom: 1px solid #333;
-        }
-        .menu button {
-            background-color: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        .content {
-            padding: 20px;
-        }
-        .footer {
-            text-align: center;
-            padding: 15px;
-            border-top: 1px solid #333;
-            font-weight: bold;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AntiScam.net</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 text-white font-sans">
 
-<div class="header">
-    <div class="avatar"></div>
-    <div class="profile-info">
-        <div>Илья</div>
-        <div>@player3o3</div>
-        <div>ID: 12345</div>
+  <!-- Шапка с названием приложения -->
+  <div class="w-full max-w-md mb-4 p-4 text-center bg-gray-800 rounded-2xl">
+    <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
+
+    <!-- Профиль интегрирован -->
+    <div onclick="goToPage('profile')" class="flex items-center justify-center gap-4 cursor-pointer bg-gray-700 p-2 rounded-xl hover:bg-gray-600 transition">
+      <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
+      <div class="flex flex-col text-left">
+        <span id="name" class="font-bold text-lg">Илья</span>
+        <span id="username" class="text-gray-300">@player3o3</span>
+        <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
+      </div>
     </div>
-</div>
+  </div>
 
-<div class="menu">
-    <button onclick="showPage('autos')">Рынок авто</button>
-    <button onclick="showPage('parts')">Рынок запчастей</button>
-    <button onclick="showPage('exchange')">Обменник</button>
-</div>
+  <!-- Разделитель -->
+  <div class="w-full max-w-md h-px bg-gray-700 mb-4"></div>
 
-<div class="content" id="content">
-    <h2>Главное меню</h2>
-    <p>Выберите раздел сверху.</p>
-</div>
+  <!-- Главное меню -->
+  <div id="menu" class="w-full max-w-md flex flex-col gap-4 mb-4">
+    <button onclick="goToPage('cars')" class="py-6 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg transition font-bold text-lg">
+      🏎 Рынок авто
+    </button>
+    <button onclick="goToPage('parts')" class="py-6 bg-green-600 hover:bg-green-700 rounded-xl shadow-lg transition font-bold text-lg">
+      🔧 Рынок запчастей
+    </button>
+    <button onclick="goToPage('exchange')" class="py-6 bg-purple-600 hover:bg-purple-700 rounded-xl shadow-lg transition font-bold text-lg">
+      💱 Обменник
+    </button>
+  </div>
 
-<div class="footer">v0.5</div>
+  <!-- Страницы -->
+  <div id="cars" class="hidden w-full max-w-md text-white">
+    <h2 class="text-2xl font-bold mb-2">🏎 Рынок авто</h2>
+    <p>Здесь будут объявления по машинам.</p>
+    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
+  </div>
 
-<script>
-function showPage(page) {
-    const content = document.getElementById('content');
-    if (page === 'autos') {
-        content.innerHTML = '<h2>Рынок авто</h2><p>Здесь будут объявления автомобилей.</p>';
-    } else if (page === 'parts') {
-        content.innerHTML = '<h2>Рынок запчастей</h2><p>Здесь будут объявления запчастей.</p>';
-    } else if (page === 'exchange') {
-        content.innerHTML = '<h2>Обменник</h2><p>Здесь будет обменник валюты и товаров.</p>';
+  <div id="parts" class="hidden w-full max-w-md text-white">
+    <h2 class="text-2xl font-bold mb-2">🔧 Рынок запчастей</h2>
+    <p>Здесь будут объявления по запчастям.</p>
+    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
+  </div>
+
+  <div id="exchange" class="hidden w-full max-w-md text-white">
+    <h2 class="text-2xl font-bold mb-2">💱 Обменник</h2>
+    <p>Обмен валютой.</p>
+    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
+  </div>
+
+  <div id="profile" class="hidden w-full max-w-md text-white">
+    <h2 class="text-2xl font-bold mb-2">👤 Профиль</h2>
+    <p>Имя: <span id="profile-name">Илья</span></p>
+    <p>Юзернейм: <span id="profile-username">@player3o3</span></p>
+    <p>ID игры: <span id="profile-gameid">12345</span></p>
+    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
+  </div>
+
+  <!-- Версия -->
+  <div class="w-full max-w-md text-center mt-auto mb-2 text-gray-500 font-bold">
+    v0.5
+  </div>
+
+  <script>
+    const pages = ['cars', 'parts', 'exchange', 'profile'];
+
+    function goToPage(name) {
+      document.getElementById('menu').classList.add('hidden');
+      pages.forEach(p => {
+        document.getElementById(p).classList.toggle('hidden', p !== name);
+      });
     }
-}
-</script>
+
+    function goHome() {
+      pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+      document.getElementById('menu').classList.remove('hidden');
+    }
+  </script>
 
 </body>
 </html>
