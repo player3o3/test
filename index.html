@@ -10,16 +10,16 @@
 
   <!-- Шапка с названием приложения -->
   <div class="w-full max-w-md mb-4 p-4 text-center bg-gray-800 rounded-2xl">
-    <h1 class="text-2xl font-bold text-blue-400">AntiScam.net</h1>
-  </div>
+    <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
 
-  <!-- Профиль -->
-  <div class="w-full max-w-md bg-gray-800 rounded-2xl p-4 mb-4 flex items-center gap-4">
-    <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
-    <div class="flex flex-col">
-      <span id="name" class="font-bold text-lg">Имя</span>
-      <span id="username" class="text-gray-300">@username</span>
-      <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
+    <!-- Профиль интегрирован -->
+    <div onclick="goToPage('profile')" class="flex items-center justify-center gap-4 cursor-pointer bg-gray-700 p-2 rounded-xl hover:bg-gray-600 transition">
+      <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
+      <div class="flex flex-col text-left">
+        <span id="name" class="font-bold text-lg">Имя</span>
+        <span id="username" class="text-gray-300">@username</span>
+        <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
+      </div>
     </div>
   </div>
 
@@ -36,9 +36,6 @@
     </button>
     <button onclick="goToPage('exchange')" class="py-6 bg-purple-600 hover:bg-purple-700 rounded-xl shadow-lg transition font-bold text-lg">
       💱 Обменник
-    </button>
-    <button onclick="goToPage('profile')" class="py-6 bg-gray-600 hover:bg-gray-500 rounded-xl shadow-lg transition font-bold text-lg">
-      👤 Профиль
     </button>
   </div>
 
