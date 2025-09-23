@@ -1,74 +1,92 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AntiScam.net v0.5</title>
-<style>
-  body { margin:0; padding:0; font-family: Arial,sans-serif; background:#1e1e1e; color:#fff; }
-  #loading { display:flex; justify-content:center; align-items:center; height:100vh; font-size:24px; }
-  #main_menu { display:none; padding:20px; }
-  .profile { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
-  .profile img { width:50px; height:50px; border-radius:50%; }
-  .profile div p { margin:2px 0; }
-  .buttons { display:flex; gap:10px; margin-bottom:20px; }
-  .buttons button { flex:1; padding:10px; background:#333; border:none; color:#fff; border-radius:8px; cursor:pointer; }
-  hr { border:0; border-top:1px solid #555; margin:10px 0; }
-  #version { text-align:center; margin-top:20px; color:#888; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AntiScam.net v0.5</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e; /* темная тема */
+            color: #ffffff;
+        }
+        .header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #333;
+        }
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #555;
+        }
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            border-bottom: 1px solid #333;
+        }
+        .menu button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            border-top: 1px solid #333;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
-<div id="loading">Загрузка...</div>
-
-<div id="main_menu">
-  <div class="profile">
-    <img id="user_avatar" src="https://via.placeholder.com/50" alt="avatar">
-    <div>
-      <p id="user_name">Имя</p>
-      <p id="user_username">@username</p>
-      <p id="user_id">ID: 12345</p>
+<div class="header">
+    <div class="avatar"></div>
+    <div class="profile-info">
+        <div>Илья</div>
+        <div>@player3o3</div>
+        <div>ID: 12345</div>
     </div>
-  </div>
-
-  <div class="buttons">
-    <button onclick="openMarket('auto')">Рынок авто</button>
-    <button onclick="openMarket('parts')">Рынок запчастей</button>
-  </div>
-
-  <hr>
-
-  <div class="buttons">
-    <button onclick="openExchange()">Обменник</button>
-  </div>
-
-  <div id="version">v0.5</div>
 </div>
 
+<div class="menu">
+    <button onclick="showPage('autos')">Рынок авто</button>
+    <button onclick="showPage('parts')">Рынок запчастей</button>
+    <button onclick="showPage('exchange')">Обменник</button>
+</div>
+
+<div class="content" id="content">
+    <h2>Главное меню</h2>
+    <p>Выберите раздел сверху.</p>
+</div>
+
+<div class="footer">v0.5</div>
+
 <script>
-const tg = window.Telegram?.WebApp;
-if(!tg){ alert("Открой приложение через кнопку в Telegram!"); }
-
-tg?.ready();
-
-const user = tg?.initDataUnsafe?.user;
-if(user){
-  document.getElementById('user_name').textContent = user.first_name || "Имя";
-  document.getElementById('user_username').textContent = "@" + (user.username || "username");
-  document.getElementById('user_id').textContent = "ID: " + (user.id || "12345");
-  // если есть аватарка в ТГ, можно вставить: user.photo_url
-  document.getElementById('main_menu').style.display = 'block';
-  document.getElementById('loading').style.display = 'none';
-} else {
-  document.getElementById('loading').textContent = "Открой через кнопку в Telegram!";
-}
-
-function openMarket(type){
-  alert("Открыть рынок: " + type);
-}
-
-function openExchange(){
-  alert("Открыть обменник");
+function showPage(page) {
+    const content = document.getElementById('content');
+    if (page === 'autos') {
+        content.innerHTML = '<h2>Рынок авто</h2><p>Здесь будут объявления автомобилей.</p>';
+    } else if (page === 'parts') {
+        content.innerHTML = '<h2>Рынок запчастей</h2><p>Здесь будут объявления запчастей.</p>';
+    } else if (page === 'exchange') {
+        content.innerHTML = '<h2>Обменник</h2><p>Здесь будет обменник валюты и товаров.</p>';
+    }
 }
 </script>
 
