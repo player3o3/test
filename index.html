@@ -1,121 +1,101 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AntiScam.net v0.5</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AntiScam.net v0.5</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e; /* Темная тема */
+    color: #ffffff;
+  }
+  #loadingSkeleton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 24px;
+    color: #aaa;
+  }
+  #mainProfile {
+    display: none;
+    padding: 20px;
+    text-align: center;
+  }
+  #profileAvatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  #tabs {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+  }
+  .tabButton {
+    padding: 10px 20px;
+    background-color: #2a2a2a;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+  }
+  .tabButton:hover {
+    background-color: #3a3a3a;
+  }
+  #version {
+    text-align: center;
+    margin-top: 30px;
+    font-weight: bold;
+    color: #888;
+  }
+</style>
 </head>
-<body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 text-white font-sans relative">
+<body>
 
-  <!-- Шапка с названием приложения -->
-  <div class="w-full max-w-md mb-4 p-4 text-center bg-gray-800 rounded-2xl">
-    <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
+<!-- Скелетон загрузки -->
+<div id="loadingSkeleton">Загрузка...</div>
 
-    <!-- Профиль с анимацией загрузки -->
-    <div onclick="goToPage('profile')" class="flex items-center justify-center gap-4 cursor-pointer bg-gray-700 p-2 rounded-xl hover:bg-gray-600 transition relative">
-        <div class="w-12 h-12 rounded-full bg-gray-600 animate-pulse" id="avatar-skeleton"></div>
-        <img id="avatar" src="" alt="Аватар" class="w-12 h-12 rounded-full hidden">
-        <div class="flex flex-col text-left">
-            <div class="bg-gray-600 h-4 w-24 rounded animate-pulse" id="name-skeleton"></div>
-            <span id="name" class="font-bold text-lg hidden"></span>
+<!-- Основной профиль -->
+<div id="mainProfile">
+  <img id="profileAvatar" src="avatar_placeholder.png" alt="Avatar" />
+  <h2 id="profileName">Имя</h2>
+  <p id="profileUsername">@username</p>
+  <p id="profileID">ID: 12345</p>
 
-            <div class="bg-gray-600 h-3 w-32 mt-1 rounded animate-pulse" id="username-skeleton"></div>
-            <span id="username" class="text-gray-300 hidden"></span>
-
-            <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
-        </div>
-    </div>
+  <!-- Вкладки -->
+  <div id="tabs">
+    <button class="tabButton" onclick="alert('Авто — пока пусто')">Авто</button>
+    <button class="tabButton" onclick="alert('Запчасти — пока пусто')">Запчасти</button>
+    <button class="tabButton" onclick="alert('Обменник — пока пусто')">Обменник</button>
   </div>
 
-  <!-- Разделитель -->
-  <div class="w-full max-w-md h-px bg-gray-700 mb-4"></div>
+  <div id="version">v0.5</div>
+</div>
 
-  <!-- Главное меню -->
-  <div id="menu" class="w-full max-w-md flex flex-col gap-4 mb-12">
-    <button onclick="goToPage('cars')" class="py-6 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg transition font-bold text-lg">
-      🏎 Рынок авто
-    </button>
-    <button onclick="goToPage('parts')" class="py-6 bg-green-600 hover:bg-green-700 rounded-xl shadow-lg transition font-bold text-lg">
-      🔧 Рынок запчастей
-    </button>
-    <button onclick="goToPage('exchange')" class="py-6 bg-purple-600 hover:bg-purple-700 rounded-xl shadow-lg transition font-bold text-lg">
-      💱 Обменник
-    </button>
-  </div>
+<script>
+  // Подключение Telegram WebApp
+  const tg = window.Telegram.WebApp;
 
-  <!-- Плашка версии внизу -->
-  <div class="absolute bottom-2 left-1/2 -translate-x-1/2 text-gray-400 text-sm">v0.5</div>
+  // Получаем данные пользователя
+  const user = tg.initDataUnsafe?.user || {first_name: "Илья", username: "player3o3", id: 12345};
 
-  <!-- Страницы -->
-  <div id="cars" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">🏎 Рынок авто</h2>
-    <p>Здесь будут объявления по машинам.</p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-  </div>
+  // Заполняем профиль
+  document.getElementById("profileName").innerText = user.first_name;
+  document.getElementById("profileUsername").innerText = user.username ? "@" + user.username : "";
+  document.getElementById("profileID").innerText = "ID: " + user.id;
 
-  <div id="parts" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">🔧 Рынок запчастей</h2>
-    <p>Здесь будут объявления по запчастям.</p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-  </div>
+  // Если есть аватарка (можно пока заглушку)
+  document.getElementById("profileAvatar").src = user.photo_url || "avatar_placeholder.png";
 
-  <div id="exchange" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">💱 Обменник</h2>
-    <p>Обмен валютой.</p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-  </div>
-
-  <div id="profile" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">👤 Профиль</h2>
-    <p>Имя: <span id="profile-name"></span></p>
-    <p>Юзернейм: <span id="profile-username"></span></p>
-    <p>ID игры: <span id="profile-gameid">12345</span></p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-  </div>
-
-  <script>
-    const pages = ['cars','parts','exchange','profile'];
-
-    function goToPage(name) {
-      document.getElementById('menu').classList.add('hidden');
-      pages.forEach(p => document.getElementById(p).classList.toggle('hidden', p !== name));
-      if(name === 'profile') fillProfile();
-    }
-
-    function goHome() {
-      pages.forEach(p => document.getElementById(p).classList.add('hidden'));
-      document.getElementById('menu').classList.remove('hidden');
-    }
-
-    function fillProfile() {
-        const tgUser = Telegram.WebApp.initDataUnsafe.user;
-        if (!tgUser) {
-            setTimeout(fillProfile, 100);
-            return;
-        }
-        // Скрываем скелеты
-        document.getElementById('avatar-skeleton').classList.add('hidden');
-        document.getElementById('name-skeleton').classList.add('hidden');
-        document.getElementById('username-skeleton').classList.add('hidden');
-
-        // Показываем реальные данные
-        document.getElementById('avatar').classList.remove('hidden');
-        document.getElementById('name').classList.remove('hidden');
-        document.getElementById('username').classList.remove('hidden');
-
-        document.getElementById('name').innerText = tgUser.first_name || "Имя";
-        document.getElementById('username').innerText = tgUser.username ? '@' + tgUser.username : "@username";
-        document.getElementById('avatar').src = tgUser.photo_url || "https://via.placeholder.com/50";
-
-        document.getElementById('profile-name').innerText = tgUser.first_name || "Имя";
-        document.getElementById('profile-username').innerText = tgUser.username ? '@' + tgUser.username : "@username";
-    }
-
-    Telegram.WebApp.ready();
-    fillProfile();
-    Telegram.WebApp.onEvent('initDataChanged', fillProfile);
-  </script>
+  // Скрываем скелетон и показываем профиль
+  document.getElementById("loadingSkeleton").style.display = "none";
+  document.getElementById("mainProfile").style.display = "block";
+</script>
 
 </body>
 </html>
