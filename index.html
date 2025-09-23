@@ -5,15 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AntiScam.net v0.5</title>
 <style>
-    body { margin:0; font-family: Arial, sans-serif; background: #1E1E1E; color: #fff; }
-    #loading { display: flex; justify-content: center; align-items: center; height: 100vh; font-size: 24px; }
-    #main_menu { display: none; padding: 20px; }
-    #profile { display: flex; align-items: center; margin-bottom: 20px; }
-    #avatar { width:50px; height:50px; border-radius:25px; background:#555; margin-right:10px; }
-    #user_info { display:flex; flex-direction: column; }
-    .buttons { display: flex; gap: 10px; margin-bottom: 20px; }
-    .btn { background:#333; padding:10px 15px; border-radius:5px; cursor:pointer; }
-    #version { text-align:center; margin-top: 50px; color:#888; }
+  body { margin:0; padding:0; font-family: Arial,sans-serif; background:#1e1e1e; color:#fff; }
+  #loading { display:flex; justify-content:center; align-items:center; height:100vh; font-size:24px; }
+  #main_menu { display:none; padding:20px; }
+  .profile { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+  .profile img { width:50px; height:50px; border-radius:50%; }
+  .profile div p { margin:2px 0; }
+  .buttons { display:flex; gap:10px; margin-bottom:20px; }
+  .buttons button { flex:1; padding:10px; background:#333; border:none; color:#fff; border-radius:8px; cursor:pointer; }
+  hr { border:0; border-top:1px solid #555; margin:10px 0; }
+  #version { text-align:center; margin-top:20px; color:#888; }
 </style>
 </head>
 <body>
@@ -21,41 +22,54 @@
 <div id="loading">Загрузка...</div>
 
 <div id="main_menu">
-    <div id="profile">
-        <div id="avatar"></div>
-        <div id="user_info">
-            <div id="user_name">Имя</div>
-            <div id="user_username">@username</div>
-            <div id="user_id">ID: 12345</div>
-        </div>
+  <div class="profile">
+    <img id="user_avatar" src="https://via.placeholder.com/50" alt="avatar">
+    <div>
+      <p id="user_name">Имя</p>
+      <p id="user_username">@username</p>
+      <p id="user_id">ID: 12345</p>
     </div>
+  </div>
 
-    <div class="buttons">
-        <div class="btn" onclick="alert('Рынок авто')">Рынок авто</div>
-        <div class="btn" onclick="alert('Рынок запчастей')">Рынок запчастей</div>
-        <div class="btn" onclick="alert('Обменник')">Обменник</div>
-    </div>
+  <div class="buttons">
+    <button onclick="openMarket('auto')">Рынок авто</button>
+    <button onclick="openMarket('parts')">Рынок запчастей</button>
+  </div>
 
-    <div id="version">v0.5</div>
+  <hr>
+
+  <div class="buttons">
+    <button onclick="openExchange()">Обменник</button>
+  </div>
+
+  <div id="version">v0.5</div>
 </div>
 
 <script>
-const tg = window.Telegram.WebApp;
+const tg = window.Telegram?.WebApp;
+if(!tg){ alert("Открой приложение через кнопку в Telegram!"); }
 
-window.addEventListener('DOMContentLoaded', () => {
-    const user = tg.initDataUnsafe?.user || {first_name: "Илья", username: "player3o3", id: 12345};
+tg?.ready();
 
-    // Скрываем загрузку
-    document.getElementById('loading').style.display = 'none';
+const user = tg?.initDataUnsafe?.user;
+if(user){
+  document.getElementById('user_name').textContent = user.first_name || "Имя";
+  document.getElementById('user_username').textContent = "@" + (user.username || "username");
+  document.getElementById('user_id').textContent = "ID: " + (user.id || "12345");
+  // если есть аватарка в ТГ, можно вставить: user.photo_url
+  document.getElementById('main_menu').style.display = 'block';
+  document.getElementById('loading').style.display = 'none';
+} else {
+  document.getElementById('loading').textContent = "Открой через кнопку в Telegram!";
+}
 
-    // Заполняем профиль
-    document.getElementById('user_name').textContent = user.first_name;
-    document.getElementById('user_username').textContent = '@' + user.username;
-    document.getElementById('user_id').textContent = 'ID: ' + user.id;
+function openMarket(type){
+  alert("Открыть рынок: " + type);
+}
 
-    // Показываем главное меню
-    document.getElementById('main_menu').style.display = 'block';
-});
+function openExchange(){
+  alert("Открыть обменник");
+}
 </script>
 
 </body>
