@@ -5,96 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AntiScam.net v0.5</title>
 <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #1e1e1e; /* Темная тема */
-    color: #ffffff;
-  }
-  #loadingSkeleton {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    font-size: 24px;
-    color: #aaa;
-  }
-  #mainProfile {
-    display: none;
-    padding: 20px;
-    text-align: center;
-  }
-  #profileAvatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-  }
-  #tabs {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 10px;
-  }
-  .tabButton {
-    padding: 10px 20px;
-    background-color: #2a2a2a;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    cursor: pointer;
-  }
-  .tabButton:hover {
-    background-color: #3a3a3a;
-  }
-  #version {
-    text-align: center;
-    margin-top: 30px;
-    font-weight: bold;
-    color: #888;
-  }
+    body { margin:0; font-family: Arial, sans-serif; background: #1E1E1E; color: #fff; }
+    #loading { display: flex; justify-content: center; align-items: center; height: 100vh; font-size: 24px; }
+    #main_menu { display: none; padding: 20px; }
+    #profile { display: flex; align-items: center; margin-bottom: 20px; }
+    #avatar { width:50px; height:50px; border-radius:25px; background:#555; margin-right:10px; }
+    #user_info { display:flex; flex-direction: column; }
+    .buttons { display: flex; gap: 10px; margin-bottom: 20px; }
+    .btn { background:#333; padding:10px 15px; border-radius:5px; cursor:pointer; }
+    #version { text-align:center; margin-top: 50px; color:#888; }
 </style>
 </head>
 <body>
 
-<!-- Скелетон загрузки -->
-<div id="loadingSkeleton">Загрузка...</div>
+<div id="loading">Загрузка...</div>
 
-<!-- Основной профиль -->
-<div id="mainProfile">
-  <img id="profileAvatar" src="avatar_placeholder.png" alt="Avatar" />
-  <h2 id="profileName">Имя</h2>
-  <p id="profileUsername">@username</p>
-  <p id="profileID">ID: 12345</p>
+<div id="main_menu">
+    <div id="profile">
+        <div id="avatar"></div>
+        <div id="user_info">
+            <div id="user_name">Имя</div>
+            <div id="user_username">@username</div>
+            <div id="user_id">ID: 12345</div>
+        </div>
+    </div>
 
-  <!-- Вкладки -->
-  <div id="tabs">
-    <button class="tabButton" onclick="alert('Авто — пока пусто')">Авто</button>
-    <button class="tabButton" onclick="alert('Запчасти — пока пусто')">Запчасти</button>
-    <button class="tabButton" onclick="alert('Обменник — пока пусто')">Обменник</button>
-  </div>
+    <div class="buttons">
+        <div class="btn" onclick="alert('Рынок авто')">Рынок авто</div>
+        <div class="btn" onclick="alert('Рынок запчастей')">Рынок запчастей</div>
+        <div class="btn" onclick="alert('Обменник')">Обменник</div>
+    </div>
 
-  <div id="version">v0.5</div>
+    <div id="version">v0.5</div>
 </div>
 
 <script>
-  // Подключение Telegram WebApp
-  const tg = window.Telegram.WebApp;
+const tg = window.Telegram.WebApp;
 
-  // Получаем данные пользователя
-  const user = tg.initDataUnsafe?.user || {first_name: "Илья", username: "player3o3", id: 12345};
+window.addEventListener('DOMContentLoaded', () => {
+    const user = tg.initDataUnsafe?.user || {first_name: "Илья", username: "player3o3", id: 12345};
 
-  // Заполняем профиль
-  document.getElementById("profileName").innerText = user.first_name;
-  document.getElementById("profileUsername").innerText = user.username ? "@" + user.username : "";
-  document.getElementById("profileID").innerText = "ID: " + user.id;
+    // Скрываем загрузку
+    document.getElementById('loading').style.display = 'none';
 
-  // Если есть аватарка (можно пока заглушку)
-  document.getElementById("profileAvatar").src = user.photo_url || "avatar_placeholder.png";
+    // Заполняем профиль
+    document.getElementById('user_name').textContent = user.first_name;
+    document.getElementById('user_username').textContent = '@' + user.username;
+    document.getElementById('user_id').textContent = 'ID: ' + user.id;
 
-  // Скрываем скелетон и показываем профиль
-  document.getElementById("loadingSkeleton").style.display = "none";
-  document.getElementById("mainProfile").style.display = "block";
+    // Показываем главное меню
+    document.getElementById('main_menu').style.display = 'block';
+});
 </script>
 
 </body>
