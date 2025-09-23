@@ -12,14 +12,19 @@
   <div class="w-full max-w-md mb-4 p-4 text-center bg-gray-800 rounded-2xl">
     <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
 
-    <!-- Профиль интегрирован -->
-    <div onclick="goToPage('profile')" class="flex items-center justify-center gap-4 cursor-pointer bg-gray-700 p-2 rounded-xl hover:bg-gray-600 transition">
-      <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
-      <div class="flex flex-col text-left">
-        <span id="name" class="font-bold text-lg">Имя</span>
-        <span id="username" class="text-gray-300">@username</span>
-        <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
-      </div>
+    <!-- Профиль с анимацией загрузки -->
+    <div onclick="goToPage('profile')" class="flex items-center justify-center gap-4 cursor-pointer bg-gray-700 p-2 rounded-xl hover:bg-gray-600 transition relative">
+        <div class="w-12 h-12 rounded-full bg-gray-600 animate-pulse" id="avatar-skeleton"></div>
+        <img id="avatar" src="" alt="Аватар" class="w-12 h-12 rounded-full hidden">
+        <div class="flex flex-col text-left">
+            <div class="bg-gray-600 h-4 w-24 rounded animate-pulse" id="name-skeleton"></div>
+            <span id="name" class="font-bold text-lg hidden"></span>
+
+            <div class="bg-gray-600 h-3 w-32 mt-1 rounded animate-pulse" id="username-skeleton"></div>
+            <span id="username" class="text-gray-300 hidden"></span>
+
+            <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
+        </div>
     </div>
   </div>
 
@@ -27,7 +32,7 @@
   <div class="w-full max-w-md h-px bg-gray-700 mb-4"></div>
 
   <!-- Главное меню -->
-  <div id="menu" class="w-full max-w-md flex flex-col gap-4 mb-12"> <!-- mb-12 чтобы место для версии было -->
+  <div id="menu" class="w-full max-w-md flex flex-col gap-4 mb-12">
     <button onclick="goToPage('cars')" class="py-6 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg transition font-bold text-lg">
       🏎 Рынок авто
     </button>
@@ -84,12 +89,27 @@
     }
 
     function fillProfile() {
-      const tgUser = Telegram.WebApp.initDataUnsafe.user || {};
-      document.getElementById('profile-name').innerText = tgUser.first_name || "Имя";
-      document.getElementById('profile-username').innerText = tgUser.username ? '@' + tgUser.username : "@username";
-      document.getElementById('avatar').src = tgUser.photo_url || "https://via.placeholder.com/50";
-      document.getElementById('name').innerText = tgUser.first_name || "Имя";
-      document.getElementById('username').innerText = tgUser.username ? '@' + tgUser.username : "@username";
+        const tgUser = Telegram.WebApp.initDataUnsafe.user;
+        if (!tgUser) {
+            setTimeout(fillProfile, 100);
+            return;
+        }
+        // Скрываем скелеты
+        document.getElementById('avatar-skeleton').classList.add('hidden');
+        document.getElementById('name-skeleton').classList.add('hidden');
+        document.getElementById('username-skeleton').classList.add('hidden');
+
+        // Показываем реальные данные
+        document.getElementById('avatar').classList.remove('hidden');
+        document.getElementById('name').classList.remove('hidden');
+        document.getElementById('username').classList.remove('hidden');
+
+        document.getElementById('name').innerText = tgUser.first_name || "Имя";
+        document.getElementById('username').innerText = tgUser.username ? '@' + tgUser.username : "@username";
+        document.getElementById('avatar').src = tgUser.photo_url || "https://via.placeholder.com/50";
+
+        document.getElementById('profile-name').innerText = tgUser.first_name || "Имя";
+        document.getElementById('profile-username').innerText = tgUser.username ? '@' + tgUser.username : "@username";
     }
 
     Telegram.WebApp.ready();
