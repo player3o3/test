@@ -38,8 +38,8 @@
       💱 Обменник
     </button>
 
-    <!-- Плашка версии -->
-    <div class="absolute bottom-0 right-4 text-gray-400 text-sm">v0.5</div>
+    <!-- Плашка версии внизу -->
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 text-gray-400 text-sm">v0.5</div>
   </div>
 
   <!-- Страницы -->
@@ -85,9 +85,8 @@
       document.getElementById('menu').classList.remove('hidden');
     }
 
-    function fillProfile() {
-      // Telegram WebApp user или fallback для браузера
-      const tgUser = Telegram?.WebApp?.initDataUnsafe?.user || {
+    function fillProfile(tgUser) {
+      tgUser = tgUser || {
         first_name: "Илья",
         username: "player3o3",
         photo_url: "https://via.placeholder.com/50"
@@ -101,7 +100,14 @@
 
     if(window.Telegram) {
       Telegram.WebApp.ready(); // уведомляем Telegram, что WebApp готов
-      fillProfile();           // заполняем профиль после инициализации
+
+      // Слушаем событие изменения данных Telegram
+      Telegram.WebApp.onEvent('initDataChanged', () => {
+        fillProfile(Telegram.WebApp.initDataUnsafe.user);
+      });
+
+      // Сразу пытаемся заполнить профиль, если данные уже есть
+      fillProfile(Telegram.WebApp.initDataUnsafe.user);
     }
   </script>
 
