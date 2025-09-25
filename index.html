@@ -13,8 +13,8 @@
   <div class="w-full max-w-md mb-4 p-4 text-center bg-gray-800 rounded-2xl">
     <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
 
-    <!-- Профиль (кликабельный переход) -->
-    <div onclick="goToPage('profile')" class="flex items-center justify-center gap-4 cursor-pointer bg-gray-700 p-2 rounded-xl hover:bg-gray-600 transition">
+    <!-- Профиль (кликабельный переход только если меню видно) -->
+    <div id="profile-card" onclick="profileClick()" class="flex items-center justify-center gap-4 cursor-pointer bg-gray-700 p-2 rounded-xl hover:bg-gray-600 transition">
       <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
       <div class="flex flex-col text-left">
         <span id="name" class="font-bold text-lg">Имя</span>
@@ -82,6 +82,8 @@
       pages.forEach(p => {
         document.getElementById(p).classList.toggle('hidden', p !== name);
       });
+      // заполняем профиль если открываем профиль
+      if (name === 'profile') fillProfile();
     }
 
     function goHome() {
@@ -89,20 +91,64 @@
       document.getElementById('menu').classList.remove('hidden');
     }
 
-    // Данные из Telegram WebApp
-    window.Telegram.WebApp.ready();
-    const user = window.Telegram.WebApp.initDataUnsafe?.user;
-
-    if (user) {
-      const fullName = user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name;
-
-      document.getElementById('name').innerText = fullName || "Без имени";
-      document.getElementById('username').innerText = user.username ? "@" + user.username : "Без юзернейма";
-      document.getElementById('avatar').src = user.photo_url || "https://via.placeholder.com/50";
-
-      document.getElementById('profile-name').innerText = fullName || "Без имени";
-      document.getElementById('profile-username').innerText = user.username ? "@" + user.username : "Без юзернейма";
+    // НОВАЯ ФУНКЦИЯ: кликаем по карточке профиля только если меню видно
+    function profileClick() {
+      const menu = document.getElementById('menu');
+      if (!menu) return;
+      // если меню видно — разрешаем переход в профиль
+      if (!menu.classList.contains('hidden')) {
+        goToPage('profile');
+      } else {
+        // иначе ничего не делаем (можно сюда добавить toast, но пока оставляем без действий)
+      }
     }
+
+    // Функция заполнения профиля (имя+фамилия)
+    function fillProfile(tgUser) {
+      tgUser = tgUser || (window.Telegram?.WebApp?.initDataUnsafe?.user) || null;
+      if (!tgUser) {
+        // шаблонные данные оставляем как есть
+        return;
+      }
+      const fullName = tgUser.last_name ? `${tgUser.first_name} ${tgUser.last_name}` : tgUser.first_name || '';
+      const uname = tgUser.username ? '@' + tgUser.username : '';
+      const gameId = tgUser.game_id || tgUser.id || '';
+      const photo = tgUser.photo_url || tgUser.photo || '';
+
+      if (fullName) {
+        document.getElementById('name').innerText = fullName;
+        document.getElementById('profile-name').innerText = fullName;
+      }
+      if (uname) {
+        document.getElementById('username').innerText = uname;
+        document.getElementById('profile-username').innerText = uname;
+      }
+      if (gameId) {
+        document.getElementById('gameid').innerText = 'ID: ' + gameId;
+        document.getElementById('profile-gameid').innerText = gameId;
+      }
+      if (photo) {
+        document.getElementById('avatar').src = photo;
+      }
+    }
+
+    // Попытка заполнить профиль при загрузке + подписка на изменения
+    (function initProfile() {
+      try {
+        const tg = window.Telegram?.WebApp;
+        tg?.ready && tg.ready();
+        fillProfile(tg?.initDataUnsafe?.user);
+
+        // если есть поддержка событий — слушаем изменения initData
+        if (tg?.onEvent) {
+          tg.onEvent('initDataChanged', () => {
+            fillProfile(tg.initDataUnsafe?.user);
+          });
+        }
+      } catch (e) {
+        // не в Telegram — оставляем шаблон
+      }
+    })();
   </script>
 
 </body>
