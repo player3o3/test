@@ -3,95 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AntiScam.net v0.5</title>
+  <title>AntiScam.net</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 min-h-screen flex flex-col items-center justify-between text-white font-sans">
+<body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 text-white font-sans">
 
-  <!-- Основной контейнер -->
-  <div class="w-full max-w-md flex flex-col items-center p-4 flex-grow">
-
-    <!-- Профиль -->
-    <div id="profile-card" class="w-full bg-gray-800 rounded-2xl p-4 flex items-center gap-4 mb-6">
-      <img id="avatar" src="https://via.placeholder.com/60" alt="Аватар" class="w-14 h-14 rounded-xl bg-gray-700">
-      <div class="flex flex-col">
-        <span id="name" class="font-bold text-lg">Имя</span>
-        <span id="username" class="text-gray-300">@юзер</span>
-        <span id="gameid" class="text-sm text-gray-400 font-bold">ID:</span>
-      </div>
-    </div>
-
-    <!-- Главное меню -->
-    <div id="menu" class="w-full flex flex-col gap-4">
-      <button onclick="goToPage('cars')" class="w-full py-5 bg-gray-700 hover:bg-gray-600 rounded-xl text-xl font-bold">
-        🏎 Рынок авто
-      </button>
-      <button onclick="goToPage('parts')" class="w-full py-5 bg-gray-700 hover:bg-gray-600 rounded-xl text-xl font-bold">
-        🔧 Рынок запчасти
-      </button>
-      <button onclick="goToPage('exchange')" class="w-full py-5 bg-gray-700 hover:bg-gray-600 rounded-xl text-xl font-bold">
-        💱 Обменник
-      </button>
-    </div>
-
-    <!-- Страницы -->
-    <div id="cars" class="hidden w-full">
-      <h2 class="text-2xl font-bold mb-2">🏎 Рынок авто</h2>
-      <p class="text-gray-300">Здесь будут объявления по машинам.</p>
-      <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-    </div>
-
-    <div id="parts" class="hidden w-full">
-      <h2 class="text-2xl font-bold mb-2">🔧 Рынок запчастей</h2>
-      <p class="text-gray-300">Здесь будут объявления по запчастям.</p>
-      <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-    </div>
-
-    <div id="exchange" class="hidden w-full">
-      <h2 class="text-2xl font-bold mb-2">💱 Обменник</h2>
-      <p class="text-gray-300">Обмен валютой и услугами.</p>
-      <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-    </div>
+  <!-- Шапка -->
+  <div class="w-full max-w-md mb-4 p-4 text-center bg-gray-800 rounded-2xl">
+    <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
   </div>
 
-  <!-- Версия внизу -->
-  <div class="mb-3 text-gray-500 text-sm">v0.5</div>
+  <!-- Главное меню -->
+  <div id="menu" class="w-full max-w-md flex flex-col gap-4 mb-4">
+
+    <!-- Профиль -->
+    <button onclick="goToPage('profile')" class="flex items-center justify-center gap-4 bg-gray-700 hover:bg-gray-600 p-3 rounded-xl shadow-lg transition">
+      <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
+      <div class="flex flex-col text-left">
+        <span id="name" class="font-bold text-lg">Имя</span>
+        <span id="username" class="text-gray-300">@username</span>
+        <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
+      </div>
+    </button>
+
+    <!-- Разделитель -->
+    <div class="w-full h-px bg-gray-700"></div>
+
+    <!-- Рынки -->
+    <button onclick="goToPage('cars')" class="py-6 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg transition font-bold text-lg">
+      🏎 Рынок авто
+    </button>
+    <button onclick="goToPage('parts')" class="py-6 bg-green-600 hover:bg-green-700 rounded-xl shadow-lg transition font-bold text-lg">
+      🔧 Рынок запчасти
+    </button>
+
+    <!-- Разделитель -->
+    <div class="w-full h-px bg-gray-700"></div>
+
+    <!-- Обменник -->
+    <button onclick="goToPage('exchange')" class="py-6 bg-purple-600 hover:bg-purple-700 rounded-xl shadow-lg transition font-bold text-lg">
+      💱 Обменник
+    </button>
+  </div>
+
+  <!-- Страницы -->
+  <div id="cars" class="hidden w-full max-w-md text-white">
+    <h2 class="text-2xl font-bold mb-2">🏎 Рынок авто</h2>
+    <p>Здесь будут объявления по машинам.</p>
+    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
+  </div>
+
+  <div id="parts" class="hidden w-full max-w-md text-white">
+    <h2 class="text-2xl font-bold mb-2">🔧 Рынок запчасти</h2>
+    <p>Здесь будут объявления по запчастям.</p>
+    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
+  </div>
+
+  <div id="exchange" class="hidden w-full max-w-md text-white">
+    <h2 class="text-2xl font-bold mb-2">💱 Обменник</h2>
+    <p>Обмен валютой.</p>
+    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
+  </div>
+
+  <div id="profile" class="hidden w-full max-w-md text-white">
+    <h2 class="text-2xl font-bold mb-2">👤 Профиль</h2>
+    <p>Имя: <span id="profile-name"></span></p>
+    <p>Юзернейм: <span id="profile-username"></span></p>
+    <p>ID игры: <span id="profile-gameid">12345</span></p>
+    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
+  </div>
+
+  <!-- Версия -->
+  <div class="mt-auto text-gray-500 text-sm text-center">v0.5</div>
 
   <script>
-    const pages = ['cars', 'parts', 'exchange'];
+    const pages = ['cars', 'parts', 'exchange', 'profile'];
 
     function goToPage(name) {
       document.getElementById('menu').classList.add('hidden');
-      document.getElementById('profile-card').classList.add('hidden');
       pages.forEach(p => {
         document.getElementById(p).classList.toggle('hidden', p !== name);
       });
+      if (name === 'profile') fillProfile();
     }
 
     function goHome() {
       pages.forEach(p => document.getElementById(p).classList.add('hidden'));
       document.getElementById('menu').classList.remove('hidden');
-      document.getElementById('profile-card').classList.remove('hidden');
     }
 
-    // Заполняем профиль
-    function fillProfile(tgUser) {
-      tgUser = tgUser || {
+    function fillProfile() {
+      const tgUser = {
         first_name: "Илья",
         username: "player3o3",
-        photo_url: "https://via.placeholder.com/60"
+        photo_url: "https://via.placeholder.com/50"
       };
-      document.getElementById('name').innerText = tgUser.first_name || '';
-      document.getElementById('username').innerText = tgUser.username ? '@' + tgUser.username : '';
-      document.getElementById('avatar').src = tgUser.photo_url || 'https://via.placeholder.com/60';
-    }
-
-    if (window.Telegram) {
-      Telegram.WebApp.ready();
-      fillProfile(Telegram.WebApp.initDataUnsafe.user);
-    } else {
-      fillProfile();
+      document.getElementById('profile-name').innerText = tgUser.first_name;
+      document.getElementById('profile-username').innerText = '@' + tgUser.username;
+      document.getElementById('avatar').src = tgUser.photo_url;
+      document.getElementById('name').innerText = tgUser.first_name;
+      document.getElementById('username').innerText = '@' + tgUser.username;
     }
   </script>
+
 </body>
 </html>
