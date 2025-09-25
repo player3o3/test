@@ -1,134 +1,105 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AntiScam.net</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-</head>
-<body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 text-white font-sans">
+import React, { useEffect, useState } from "react";
 
-  <!-- Шапка с названием приложения -->
-  <div id="app-header" class="w-full max-w-md mb-4 p-4 text-center bg-gray-800 rounded-2xl">
-    <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
+export default function App() {
+  const [activeTab, setActiveTab] = useState("menu");
+  const [user, setUser] = useState(null);
+  const [needsVerification, setNeedsVerification] = useState(false);
 
-    <!-- Профиль (кликабельный переход) -->
-    <div onclick="goToPage('profile')" class="flex items-center justify-center gap-4 cursor-pointer bg-gray-700 p-2 rounded-xl hover:bg-gray-600 transition">
-      <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
-      <div class="flex flex-col text-left">
-        <span id="name" class="font-bold text-lg">Имя</span>
-        <span id="username" class="text-gray-300">@username</span>
-        <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
+  useEffect(() => {
+    if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+      const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+
+      // сохраняем данные из Telegram всегда
+      setUser({
+        id: tgUser.id,
+        name: `${tgUser.first_name || ""} ${tgUser.last_name || ""}`.trim(),
+        username: tgUser.username || "",
+      });
+
+      // проверяем, есть ли id в базе
+      const allowedIds = JSON.parse(localStorage.getItem("allowedIds") || "[]");
+      if (!allowedIds.includes(tgUser.id)) {
+        setNeedsVerification(true);
+      }
+    }
+  }, []);
+
+  // экран ожидания подтверждения
+  if (needsVerification) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="p-6 bg-white rounded-xl shadow">
+          <h2 className="text-xl font-bold">Требуется подтверждение</h2>
+          <p className="mt-2 text-gray-600">
+            Отправьте скрин с вашим игровым ID боту. После проверки админом доступ откроется.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // загрузка пока не подтянули данные
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-gray-500">Загрузка...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col h-screen">
+      {/* верхняя панель */}
+      <div className="p-4 bg-gray-100 shadow flex justify-between items-center">
+        <h1 className="text-lg font-bold">Baraholka</h1>
+        {activeTab === "menu" && (
+          <span className="text-xs text-gray-500">v0.5</span>
+        )}
+      </div>
+
+      {/* контент */}
+      <div className="flex-1 p-4 overflow-auto">
+        {activeTab === "menu" && (
+          <div className="space-y-4">
+            <button
+              className="w-full p-4 bg-blue-500 text-white rounded-xl"
+              onClick={() => setActiveTab("market")}
+            >
+              Рынок
+            </button>
+            <button
+              className="w-full p-4 bg-green-500 text-white rounded-xl"
+              onClick={() => setActiveTab("exchange")}
+            >
+              Обменник
+            </button>
+            <button
+              className="w-full p-4 bg-purple-500 text-white rounded-xl"
+              onClick={() => setActiveTab("profile")}
+            >
+              Профиль
+            </button>
+          </div>
+        )}
+
+        {activeTab === "market" && <p>Здесь будет рынок</p>}
+        {activeTab === "exchange" && <p>Здесь будет обменник</p>}
+        {activeTab === "profile" && (
+          <div>
+            <h2 className="text-xl font-bold mb-2">Профиль</h2>
+            <p>Имя: {user.name}</p>
+            <p>ID: {user.id}</p>
+            {user.username && <p>Юзернейм: @{user.username}</p>}
+          </div>
+        )}
+      </div>
+
+      {/* нижние вкладки */}
+      <div className="p-4 bg-gray-100 shadow flex justify-around">
+        <button onClick={() => setActiveTab("menu")}>Меню</button>
+        <button onClick={() => setActiveTab("market")}>Рынок</button>
+        <button onClick={() => setActiveTab("exchange")}>Обменник</button>
       </div>
     </div>
-  </div>
-
-  <!-- Разделитель -->
-  <div id="divider" class="w-full max-w-md h-px bg-gray-700 mb-4"></div>
-
-  <!-- Главное меню -->
-  <div id="menu" class="w-full max-w-md flex flex-col gap-4 mb-4">
-    <button onclick="goToPage('cars')" class="py-6 bg-gray-700 hover:bg-gray-600 rounded-xl shadow-lg transition font-bold text-lg">
-      🏎 Рынок авто
-    </button>
-    <button onclick="goToPage('parts')" class="py-6 bg-gray-700 hover:bg-gray-600 rounded-xl shadow-lg transition font-bold text-lg">
-      🔧 Рынок запчасти
-    </button>
-
-    <!-- Разделитель -->
-    <div class="w-full h-px bg-gray-700"></div>
-
-    <button onclick="goToPage('exchange')" class="py-6 bg-gray-700 hover:bg-gray-600 rounded-xl shadow-lg transition font-bold text-lg">
-      💱 Обменник
-    </button>
-
-    <!-- Версия -->
-    <p class="text-center text-gray-500 text-sm mt-4">v0.5</p>
-  </div>
-
-  <!-- Заглушка при отсутствии доступа -->
-  <div id="blocked" class="hidden w-full max-w-md text-center text-red-400">
-    <h2 class="text-2xl font-bold mb-2">🚫 Доступ закрыт</h2>
-    <p class="mb-4">Ваш ID пока не подтверждён. Отправьте скриншот боту и дождитесь проверки администратором.</p>
-  </div>
-
-  <!-- Страницы -->
-  <div id="cars" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">🏎 Рынок авто</h2>
-    <p>Здесь будут объявления по машинам.</p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅️ Назад</button>
-  </div>
-
-  <div id="parts" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">🔧 Рынок запчасти</h2>
-    <p>Здесь будут объявления по запчастям.</p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅️ Назад</button>
-  </div>
-
-  <div id="exchange" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">💱 Обменник</h2>
-    <p>Обмен валютой.</p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅️ Назад</button>
-  </div>
-
-  <div id="profile" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">👤 Профиль</h2>
-    <p>Имя: <span id="profile-name"></span></p>
-    <p>Юзернейм: <span id="profile-username"></span></p>
-    <p>ID игры: <span id="profile-gameid">12345</span></p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅️ Назад</button>
-  </div>
-
-  <script>
-    const pages = ['cars', 'parts', 'exchange', 'profile'];
-
-    function goToPage(name) {
-      document.getElementById('menu').classList.add('hidden');
-      document.getElementById('app-header').classList.add('hidden');
-      document.getElementById('divider').classList.add('hidden');
-
-      pages.forEach(p => {
-        document.getElementById(p).classList.toggle('hidden', p !== name);
-      });
-    }
-
-    function goHome() {
-      pages.forEach(p => document.getElementById(p).classList.add('hidden'));
-      document.getElementById('menu').classList.remove('hidden');
-      document.getElementById('app-header').classList.remove('hidden');
-      document.getElementById('divider').classList.remove('hidden');
-    }
-
-    // Данные из Telegram WebApp
-    window.Telegram.WebApp.ready();
-    const user = window.Telegram.WebApp.initDataUnsafe?.user;
-
-    // 🔑 Пока имитация: null = нет доступа, строка = ID
-    const approvedGameId = null; // замени на "5828101" чтобы проверить доступ
-
-    if (approvedGameId) {
-      // ✅ Есть доступ
-      document.getElementById('menu').classList.remove('hidden');
-      document.getElementById('blocked').classList.add('hidden');
-
-      if (user) {
-        const fullName = user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name;
-
-        document.getElementById('name').innerText = fullName || "Без имени";
-        document.getElementById('username').innerText = user.username ? "@" + user.username : "Без юзернейма";
-        document.getElementById('avatar').src = user.photo_url || "https://via.placeholder.com/50";
-
-        document.getElementById('profile-name').innerText = fullName || "Без имени";
-        document.getElementById('profile-username').innerText = user.username ? "@" + user.username : "Без юзернейма";
-        document.getElementById('profile-gameid').innerText = approvedGameId;
-      }
-    } else {
-      // ❌ Нет доступа
-      document.getElementById('menu').classList.add('hidden');
-      document.getElementById('blocked').classList.remove('hidden');
-    }
-  </script>
-
-</body>
-</html>
+  );
+}
