@@ -28,7 +28,7 @@ export default function App() {
   if (needsVerification) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="p-6 bg-white rounded-xl shadow">
+        <div className="p-6 bg-white rounded-xl shadow text-center">
           <h2 className="text-xl font-bold">Требуется подтверждение</h2>
           <p className="mt-2 text-gray-600">
             Отправьте скрин с вашим игровым ID боту. После проверки админом доступ откроется.
@@ -48,12 +48,12 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen bg-gray-900 text-white">
       {/* верхняя панель */}
-      <div className="p-4 bg-gray-100 shadow flex justify-between items-center">
+      <div className="p-4 bg-gray-800 shadow flex justify-between items-center">
         <h1 className="text-lg font-bold">Baraholka</h1>
         {activeTab === "menu" && (
-          <span className="text-xs text-gray-500">v0.5</span>
+          <span className="text-xs text-gray-400">v0.5</span>
         )}
       </div>
 
@@ -95,7 +95,7 @@ export default function App() {
       </div>
 
       {/* нижние вкладки */}
-      <div className="p-4 bg-gray-100 shadow flex justify-around">
+      <div className="p-4 bg-gray-800 shadow flex justify-around">
         <button onClick={() => setActiveTab("menu")}>Меню</button>
         <button onClick={() => setActiveTab("market")}>Рынок</button>
         <button onClick={() => setActiveTab("exchange")}>Обменник</button>
