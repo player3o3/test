@@ -14,7 +14,7 @@
     <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
 
     <!-- Профиль (кликабельный переход) -->
-    <div class="flex items-center justify-center gap-4 bg-gray-700 p-2 rounded-xl">
+    <div onclick="goToPage('profile')" class="flex items-center justify-center gap-4 cursor-pointer bg-gray-700 p-2 rounded-xl hover:bg-gray-600 transition">
       <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
       <div class="flex flex-col text-left">
         <span id="name" class="font-bold text-lg">Имя</span>
@@ -66,8 +66,16 @@
     <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅️ Назад</button>
   </div>
 
+  <div id="profile" class="hidden w-full max-w-md text-white">
+    <h2 class="text-2xl font-bold mb-2">👤 Профиль</h2>
+    <p>Имя: <span id="profile-name"></span></p>
+    <p>Юзернейм: <span id="profile-username"></span></p>
+    <p>ID игры: <span id="profile-gameid">12345</span></p>
+    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅️ Назад</button>
+  </div>
+
   <script>
-    const pages = ['cars', 'parts', 'exchange']; // профиль убран
+    const pages = ['cars', 'parts', 'exchange', 'profile'];
 
     function goToPage(name) {
       document.getElementById('menu').classList.add('hidden');
@@ -89,6 +97,9 @@
       document.getElementById('name').innerText = user.first_name || "Без имени";
       document.getElementById('username').innerText = user.username ? "@" + user.username : "Без юзернейма";
       document.getElementById('avatar').src = user.photo_url || "https://via.placeholder.com/50";
+
+      document.getElementById('profile-name').innerText = user.first_name || "Без имени";
+      document.getElementById('profile-username').innerText = user.username ? "@" + user.username : "Без юзернейма";
     }
   </script>
 
