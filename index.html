@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AntiScam.net</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 text-white font-sans">
 
-  <!-- Шапка с названием приложения -->
+  <!-- ТОЛЬКО заголовок в шапке — профиль НЕ тут -->
   <div class="w-full max-w-md mb-4 p-4 text-center bg-gray-800 rounded-2xl">
     <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
+  </div>
 
-    <!-- Профиль (кликабельный переход — только здесь, в главном меню) -->
+  <!-- Раздел: главное меню (профиль находится внутри menu — будет скрываться вместе с menu) -->
+  <div id="menu" class="w-full max-w-md flex flex-col gap-4 mb-4">
+
+    <!-- === ПРОФИЛЬ (теперь в меню, клик открывает вкладку профиля) === -->
     <div onclick="goToPage('profile')" class="flex items-center justify-center gap-4 cursor-pointer bg-gray-700 p-2 rounded-xl hover:bg-gray-600 transition">
       <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
       <div class="flex flex-col text-left">
@@ -22,13 +26,11 @@
         <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
       </div>
     </div>
-  </div>
 
-  <!-- Разделитель -->
-  <div class="w-full max-w-md h-px bg-gray-700 mb-4"></div>
+    <!-- Разделитель (показывается только в меню) -->
+    <div class="w-full h-px bg-gray-700 mb-0"></div>
 
-  <!-- Главное меню -->
-  <div id="menu" class="w-full max-w-md flex flex-col gap-4 mb-4">
+    <!-- Кнопки рынков -->
     <button onclick="goToPage('cars')" class="py-6 bg-gray-700 hover:bg-gray-600 rounded-xl shadow-lg transition font-bold text-lg">
       🏎 Рынок авто
     </button>
@@ -39,15 +41,16 @@
     <!-- Разделитель -->
     <div class="w-full h-px bg-gray-700"></div>
 
+    <!-- Обменник -->
     <button onclick="goToPage('exchange')" class="py-6 bg-gray-700 hover:bg-gray-600 rounded-xl shadow-lg transition font-bold text-lg">
       💱 Обменник
     </button>
 
-    <!-- Версия -->
+    <!-- Версия (ТОЛЬКО В МЕНЮ) -->
     <p class="text-center text-gray-500 text-sm mt-4">v0.5</p>
   </div>
 
-  <!-- Страницы -->
+  <!-- === Страницы (все скрыты по умолчанию) === -->
   <div id="cars" class="hidden w-full max-w-md text-white">
     <h2 class="text-2xl font-bold mb-2">🏎 Рынок авто</h2>
     <p>Здесь будут объявления по машинам.</p>
@@ -70,40 +73,103 @@
     <h2 class="text-2xl font-bold mb-2">👤 Профиль</h2>
     <p>Имя: <span id="profile-name"></span></p>
     <p>Юзернейм: <span id="profile-username"></span></p>
-    <p>ID игры: <span id="profile-gameid">5828101</span></p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅️ Назад</button>
+    <p>ID игры: <span id="profile-gameid">12345</span></p>
+    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅️ Назад в меню</button>
   </div>
 
   <script>
+    // список страниц (profile остаётся, но карточка профиля теперь внутри меню)
     const pages = ['cars', 'parts', 'exchange', 'profile'];
 
     function goToPage(name) {
+      // спрячем меню (вместе с профилем)
       document.getElementById('menu').classList.add('hidden');
+
+      // покажем только нужную страницу
       pages.forEach(p => {
         document.getElementById(p).classList.toggle('hidden', p !== name);
       });
+
+      // если открываем профиль — убедимся, что данные подгрузились
+      if (name === 'profile') fillProfile();
     }
 
     function goHome() {
+      // спрячем все страницы и вернём меню
       pages.forEach(p => document.getElementById(p).classList.add('hidden'));
       document.getElementById('menu').classList.remove('hidden');
     }
 
-    // Данные из Telegram WebApp
-    window.Telegram.WebApp.ready();
-    const user = window.Telegram.WebApp.initDataUnsafe?.user;
+    /* ====== Telegram profile filling: robust but unobtrusive ======
+       - пытаемся взять initDataUnsafe.user сразу
+       - подписываемся на initDataChanged
+       - лёгкий retry (5s) на случай задержки
+       - не ломает работу вне Telegram
+    =============================================================== */
+    function applyProfileData(tgUser) {
+      if (!tgUser) return;
+      const fullName = tgUser.last_name ? `${tgUser.first_name} ${tgUser.last_name}` : (tgUser.first_name || '');
+      const uname = tgUser.username ? `@${tgUser.username}` : '';
+      const gameId = tgUser.game_id || tgUser.id || '';
+      const photo = tgUser.photo_url || tgUser.photo || '';
 
-    if (user) {
-      const fullName = user.last_name ? user.first_name + " " + user.last_name : user.first_name;
+      if (fullName) {
+        document.getElementById('name').innerText = fullName;
+        document.getElementById('profile-name').innerText = fullName;
+      }
+      document.getElementById('username').innerText = uname || document.getElementById('username').innerText;
+      document.getElementById('profile-username').innerText = uname || document.getElementById('profile-username').innerText;
 
-      document.getElementById('name').innerText = fullName || "Без имени";
-      document.getElementById('username').innerText = user.username ? "@" + user.username : "Без юзернейма";
-      document.getElementById('avatar').src = user.photo_url || "https://via.placeholder.com/50";
-
-      document.getElementById('profile-name').innerText = fullName || "Без имени";
-      document.getElementById('profile-username').innerText = user.username ? "@" + user.username : "Без юзернейма";
+      if (gameId) {
+        document.getElementById('gameid').innerText = 'ID: ' + gameId;
+        document.getElementById('profile-gameid').innerText = gameId;
+      }
+      if (photo) {
+        document.getElementById('avatar').src = photo;
+      }
     }
-  </script>
 
+    (function initProfileLoading(){
+      let attempts = 0;
+      const maxAttempts = 50; // ~5 seconds
+      const intervalMs = 100;
+
+      function tryOnce() {
+        attempts++;
+        const tg = window.Telegram?.WebApp;
+        const user = tg?.initDataUnsafe?.user;
+        if (user) {
+          applyProfileData(user);
+          return true;
+        }
+        return attempts >= maxAttempts;
+      }
+
+      // try immediately
+      try {
+        tryOnce();
+      } catch(e){ /* ignore */ }
+
+      // start retry loop
+      const t = setInterval(() => {
+        const done = tryOnce();
+        if (done) clearInterval(t);
+      }, intervalMs);
+
+      // subscribe to initDataChanged if available
+      try {
+        const tg = window.Telegram?.WebApp;
+        tg?.ready && tg.ready();
+        if (tg?.onEvent) {
+          tg.onEvent('initDataChanged', () => {
+            try {
+              const user = tg.initDataUnsafe?.user;
+              if (user) applyProfileData(user);
+            } catch(e){ /* ignore */ }
+          });
+        }
+      } catch(e) { /* ignore */ }
+    })();
+  </script>
 </body>
 </html>
