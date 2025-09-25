@@ -2,109 +2,69 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AntiScam.net</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Барахолка | v0.5</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 20px;
+      gap: 10px;
+    }
+
+    .btn {
+      display: block;
+      background: #fff;
+      padding: 15px;
+      text-align: center;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      text-decoration: none;
+      transition: transform 0.1s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    .divider {
+      height: 1px;
+      background: #ddd;
+      margin: 5px 0;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: #888;
+    }
+  </style>
 </head>
-<body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 text-white font-sans">
-
-  <!-- Шапка -->
-  <div class="w-full max-w-md mb-4 p-4 text-center bg-gray-800 rounded-2xl">
-    <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
+<body>
+  <div class="container">
+    <a href="#" class="btn">Профиль</a>
+    <div class="divider"></div>
+    <a href="#" class="btn">Рынок авто</a>
+    <a href="#" class="btn">Рынок запчасти</a>
+    <div class="divider"></div>
+    <a href="#" class="btn">Обменник</a>
   </div>
-
-  <!-- Главное меню -->
-  <div id="menu" class="w-full max-w-md flex flex-col gap-4 mb-4">
-
-    <!-- Профиль -->
-    <button onclick="goToPage('profile')" class="flex items-center justify-center gap-4 bg-gray-700 hover:bg-gray-600 p-3 rounded-xl shadow-lg transition">
-      <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
-      <div class="flex flex-col text-left">
-        <span id="name" class="font-bold text-lg">Имя</span>
-        <span id="username" class="text-gray-300">@username</span>
-        <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
-      </div>
-    </button>
-
-    <!-- Разделитель -->
-    <div class="w-full h-px bg-gray-700"></div>
-
-    <!-- Рынки -->
-    <button onclick="goToPage('cars')" class="py-6 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg transition font-bold text-lg">
-      🏎 Рынок авто
-    </button>
-    <button onclick="goToPage('parts')" class="py-6 bg-green-600 hover:bg-green-700 rounded-xl shadow-lg transition font-bold text-lg">
-      🔧 Рынок запчасти
-    </button>
-
-    <!-- Разделитель -->
-    <div class="w-full h-px bg-gray-700"></div>
-
-    <!-- Обменник -->
-    <button onclick="goToPage('exchange')" class="py-6 bg-purple-600 hover:bg-purple-700 rounded-xl shadow-lg transition font-bold text-lg">
-      💱 Обменник
-    </button>
-  </div>
-
-  <!-- Страницы -->
-  <div id="cars" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">🏎 Рынок авто</h2>
-    <p>Здесь будут объявления по машинам.</p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-  </div>
-
-  <div id="parts" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">🔧 Рынок запчасти</h2>
-    <p>Здесь будут объявления по запчастям.</p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-  </div>
-
-  <div id="exchange" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">💱 Обменник</h2>
-    <p>Обмен валютой.</p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-  </div>
-
-  <div id="profile" class="hidden w-full max-w-md text-white">
-    <h2 class="text-2xl font-bold mb-2">👤 Профиль</h2>
-    <p>Имя: <span id="profile-name"></span></p>
-    <p>Юзернейм: <span id="profile-username"></span></p>
-    <p>ID игры: <span id="profile-gameid">12345</span></p>
-    <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
-  </div>
-
-  <!-- Версия -->
-  <div class="mt-auto text-gray-500 text-sm text-center">v0.5</div>
-
-  <script>
-    const pages = ['cars', 'parts', 'exchange', 'profile'];
-
-    function goToPage(name) {
-      document.getElementById('menu').classList.add('hidden');
-      pages.forEach(p => {
-        document.getElementById(p).classList.toggle('hidden', p !== name);
-      });
-      if (name === 'profile') fillProfile();
-    }
-
-    function goHome() {
-      pages.forEach(p => document.getElementById(p).classList.add('hidden'));
-      document.getElementById('menu').classList.remove('hidden');
-    }
-
-    function fillProfile() {
-      const tgUser = {
-        first_name: "Илья",
-        username: "player3o3",
-        photo_url: "https://via.placeholder.com/50"
-      };
-      document.getElementById('profile-name').innerText = tgUser.first_name;
-      document.getElementById('profile-username').innerText = '@' + tgUser.username;
-      document.getElementById('avatar').src = tgUser.photo_url;
-      document.getElementById('name').innerText = tgUser.first_name;
-      document.getElementById('username').innerText = '@' + tgUser.username;
-    }
-  </script>
-
+  <div class="footer">v0.5</div>
 </body>
 </html>
