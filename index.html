@@ -1,47 +1,58 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>AntiScam.net v0.5</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-900 min-h-screen flex flex-col items-center text-white font-sans">
 
-  <!-- Контейнер -->
-  <div class="w-full max-w-md p-4 flex flex-col gap-4">
+  <div class="w-full max-w-md p-4 flex flex-col items-center">
 
-    <!-- Профиль-кард (кликается) -->
-    <div id="profile-card" onclick="goToPage('profile')" class="w-full bg-gray-800 rounded-2xl p-4 flex items-center gap-4 cursor-pointer hover:bg-gray-700 transition">
-      <img id="avatar" src="https://via.placeholder.com/60" alt="avatar" class="w-14 h-14 rounded-xl bg-gray-700">
-      <div class="flex flex-col">
-        <span id="name" class="font-bold text-lg">Илья</span>
-        <span id="username" class="text-gray-300">@player3o3</span>
-        <span id="gameid" class="text-sm text-gray-400">ID: 12345</span>
+    <!-- --------- Главное меню (весь блок скрывается при переходе) --------- -->
+    <div id="menu" class="w-full">
+
+      <!-- Заголовок -->
+      <div class="mb-4 p-4 text-center bg-gray-800 rounded-2xl">
+        <h1 class="text-2xl font-bold text-blue-400 mb-2">AntiScam.net</h1>
       </div>
-    </div>
 
-    <!-- Разделитель -->
-    <div class="w-full h-px bg-gray-700"></div>
+      <!-- Профиль (карточка кликабельна, открывает профиль) -->
+      <div id="profile-card" onclick="goToPage('profile')" class="cursor-pointer flex items-center gap-4 bg-gray-700 p-3 rounded-xl mb-4 hover:bg-gray-600 transition">
+        <img id="avatar" src="https://via.placeholder.com/50" alt="Аватар" class="w-12 h-12 rounded-full">
+        <div class="flex flex-col text-left">
+          <span id="name" class="font-bold text-lg">Илья</span>
+          <span id="username" class="text-gray-300">@player3o3</span>
+          <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
+        </div>
+      </div>
 
-    <!-- Главное меню (весь блок меню скрывается при переходе) -->
-    <div id="menu" class="w-full flex flex-col gap-4">
+      <!-- Разделитель -->
+      <div class="w-full h-px bg-gray-700 mb-4"></div>
 
-      <!-- Рынки (два подряд без разделителя между ними) -->
-      <button onclick="goToPage('cars')" class="w-full py-5 bg-gray-700 hover:bg-gray-600 rounded-xl text-xl font-bold">🏎 Рынок авто</button>
-      <button onclick="goToPage('parts')" class="w-full py-5 bg-gray-700 hover:bg-gray-600 rounded-xl text-xl font-bold">🔧 Рынок запчасти</button>
+      <!-- Рынки (две кнопки подряд) -->
+      <div class="flex flex-col gap-4 mb-4">
+        <button onclick="goToPage('cars')" class="py-6 bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg font-bold text-lg">🏎 Рынок авто</button>
+        <button onclick="goToPage('parts')" class="py-6 bg-green-600 hover:bg-green-700 rounded-xl shadow-lg font-bold text-lg">🔧 Рынок запчасти</button>
+      </div>
 
-      <!-- Разделитель перед обменником -->
-      <div class="w-full h-px bg-gray-700 my-2"></div>
+      <!-- Разделитель -->
+      <div class="w-full h-px bg-gray-700 my-4"></div>
 
       <!-- Обменник -->
-      <button onclick="goToPage('exchange')" class="w-full py-5 bg-gray-700 hover:bg-gray-600 rounded-xl text-xl font-bold">💱 Обменник</button>
+      <div class="mb-4">
+        <button onclick="goToPage('exchange')" class="w-full py-6 bg-purple-600 hover:bg-purple-700 rounded-xl shadow-lg font-bold text-lg">💱 Обменник</button>
+      </div>
 
-      <!-- Плашка версии — только в меню -->
-      <div id="menu-version" class="mt-4 text-center text-gray-400 text-sm">v0.5</div>
+      <!-- Версия - ТОЛЬКО в главном меню -->
+      <div class="text-center text-gray-400 text-sm">v0.5</div>
+
     </div>
+    <!-- --------------------------- /menu --------------------------- -->
 
-    <!-- Страницы (по умолчанию скрыты) -->
+    <!-- --------- Страницы (все скрыты по умолчанию) --------- -->
+
     <div id="cars" class="hidden w-full">
       <h2 class="text-2xl font-bold mb-2">🏎 Рынок авто</h2>
       <p class="text-gray-300">Здесь будут объявления по машинам.</p>
@@ -68,71 +79,117 @@
       <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅ Назад</button>
     </div>
 
-  </div>
+    <!-- --------------------------- /pages --------------------------- -->
 
-  <!-- Скрипт: навигация + профиль -->
+  </div> <!-- /container -->
+
   <script>
-    // Все страницы, которые нужно скрывать/показывать
     const pages = ['cars','parts','exchange','profile'];
 
-    // Переход на страницу: скрываем главный меню + карточку профиля, показываем выбранную страницу
     function goToPage(name){
-      // Скрываем меню (включая версию) и верхний кард
+      // скрываем главное меню (включая обменник и версию)
       document.getElementById('menu').classList.add('hidden');
-      document.getElementById('profile-card').classList.add('hidden');
 
-      // Показать только нужную страницу
+      // скрываем все страницы, затем показываем нужную
       pages.forEach(p => {
-        const el = document.getElementById(p);
-        if(!el) return;
-        if(p === name) el.classList.remove('hidden');
-        else el.classList.add('hidden');
+        document.getElementById(p).classList.toggle('hidden', p !== name);
       });
 
-      // если профиль — заполняем данные
+      // если профиль — подгружаем данные
       if(name === 'profile') fillProfile();
     }
 
-    // Назад в главное меню: скрыть страницы, показать menu + profile-card
     function goHome(){
-      pages.forEach(p => {
-        const el = document.getElementById(p);
-        if(el) el.classList.add('hidden');
-      });
+      // скрываем страницы
+      pages.forEach(p => document.getElementById(p).classList.add('hidden'));
+      // показываем меню
       document.getElementById('menu').classList.remove('hidden');
-      document.getElementById('profile-card').classList.remove('hidden');
     }
 
-    // Заполняем профиль в двух местах: верхний кард и отдельная страница профиля
-    function fillProfile(tgUser){
-      // Если Telegram есть — берем оттуда, иначе шаблон
-      let user = tgUser || (window.Telegram && Telegram.WebApp && Telegram.WebApp.initDataUnsafe && Telegram.WebApp.initDataUnsafe.user) || null;
-      if(!user){
-        user = { first_name: "Илья", username: "player3o3", photo_url: "https://via.placeholder.com/60", gameid: "12345" };
-      }
+    /* ================== Telegram integration patch ==================
+       Goals:
+       - Try to read Telegram.WebApp.initDataUnsafe.user immediately
+       - Subscribe to initDataChanged to update if data arrives later
+       - Fallback retry loop (limited attempts) to catch slight delays
+       - If no data -> keep placeholders (design untouched)
+    ==================================================================*/
 
-      // верхний кард
-      document.getElementById('name').innerText = user.first_name || '';
-      document.getElementById('username').innerText = user.username ? '@' + user.username : '';
-      document.getElementById('gameid').innerText = user.gameid ? ('ID: ' + user.gameid) : ('ID: ' + (user.id || '12345'));
-      document.getElementById('avatar').src = user.photo_url || 'https://via.placeholder.com/60';
+    // Update profile UI in one place (updates both card and profile page)
+    function applyProfileData(tgUser) {
+      if(!tgUser) return;
+      const first = tgUser.first_name || '';
+      const uname = tgUser.username ? ('@' + tgUser.username) : '';
+      const photo = tgUser.photo_url || tgUser.photo || 'https://via.placeholder.com/50'; // sometimes different fields
+      const gameId = tgUser.game_id || tgUser.id || '12345';
 
-      // страница профиля
-      document.getElementById('profile-name').innerText = user.first_name || '';
-      document.getElementById('profile-username').innerText = user.username ? '@' + user.username : '';
-      document.getElementById('profile-gameid').innerText = user.gameid ? user.gameid : (user.id || '12345');
+      document.getElementById('profile-name').innerText = first;
+      document.getElementById('profile-username').innerText = uname;
+      document.getElementById('profile-gameid').innerText = gameId;
+
+      document.getElementById('name').innerText = first;
+      document.getElementById('username').innerText = uname;
+      document.getElementById('gameid').innerText = 'ID: ' + gameId;
+
+      // avatar on both places (profile card image uses id 'avatar')
+      const av = document.getElementById('avatar');
+      if(av && photo) av.src = photo;
     }
 
-    // Инициализация: пытаемся заполнить профиль из Telegram (если есть)
-    (function init(){
-      // если Telegram WebApp доступен — дергнуть ready и заполнить
-      if(window.Telegram && Telegram.WebApp){
-        try {
-          Telegram.WebApp.ready();
-        } catch(e){}
+    // Robust fill: immediate, retry loop, and event listener
+    (function initTelegramProfile() {
+      // placeholders already in HTML; we will replace when data available
+      let attempts = 0;
+      const maxAttempts = 50; // 50 * 100ms = 5s total retry window
+      const intervalMs = 100;
+      let retryTimer = null;
+
+      function tryFillOnce() {
+        attempts++;
+        const tg = window.Telegram?.WebApp;
+        const user = tg?.initDataUnsafe?.user;
+        if (user) {
+          applyProfileData(user);
+          if (retryTimer) { clearInterval(retryTimer); retryTimer = null; }
+          return true;
+        }
+        if (attempts >= maxAttempts) {
+          if (retryTimer) { clearInterval(retryTimer); retryTimer = null; }
+          return false;
+        }
+        return false;
       }
-      fillProfile();
+
+      // Try immediately
+      tryFillOnce();
+
+      // Start retry loop (in case initData arrives slightly later)
+      retryTimer = setInterval(() => {
+        const done = tryFillOnce();
+        if (done) {
+          clearInterval(retryTimer); retryTimer = null;
+        }
+      }, intervalMs);
+
+      // Listen to initDataChanged event (if available) — updates when Telegram pushes data
+      try {
+        const tg = window.Telegram?.WebApp;
+        if (tg?.onEvent) {
+          tg.onEvent('initDataChanged', () => {
+            try {
+              const user = tg.initDataUnsafe?.user;
+              if (user) applyProfileData(user);
+            } catch(e) { /* ignore */ }
+          });
+        }
+        // ensure ready call (does nothing harmful if already ready)
+        tg?.ready && tg.ready();
+      } catch(e) {
+        // ignore — we keep placeholders
+      }
     })();
+
+    // End of Telegram integration patch
   </script>
+
 </body>
 </html>
