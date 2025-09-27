@@ -93,11 +93,11 @@
     const user = window.Telegram.WebApp.initDataUnsafe?.user;
 
     if (user) {
-      const fullName = user.last_name ? ${user.first_name} ${user.last_name} : user.first_name;
+      const fullName = user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name;
 
-document.getElementById('name').innerText = fullName  "Без имени";
+      document.getElementById('name').innerText = fullName || "Без имени";
       document.getElementById('username').innerText = user.username ? "@" + user.username : "Без юзернейма";
-      document.getElementById('avatar').src = user.photo_url  "https://via.placeholder.com/50";
+      document.getElementById('avatar').src = user.photo_url || "https://via.placeholder.com/50";
 
       document.getElementById('profile-name').innerText = fullName || "Без имени";
       document.getElementById('profile-username').innerText = user.username ? "@" + user.username : "Без юзернейма";
