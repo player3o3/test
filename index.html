@@ -22,7 +22,7 @@
         <div class="flex flex-col text-left">
           <span id="name" class="font-bold text-lg">Имя</span>
           <span id="username" class="text-gray-300">@username</span>
-          <span id="gameid" class="text-gray-400 text-sm">ID: 12345</span>
+          <span id="gameid" class="text-gray-400 text-sm">ID: ...</span>
         </div>
       </div>
     </div>
@@ -69,7 +69,7 @@
     <h2 class="text-2xl font-bold mb-2">👤 Профиль</h2>
     <p>Имя: <span id="profile-name"></span></p>
     <p>Юзернейм: <span id="profile-username"></span></p>
-    <p>ID игры: <span id="profile-gameid">12345</span></p>
+    <p>ID игры: <span id="profile-gameid">...</span></p>
     <button onclick="goHome()" class="mt-4 py-2 px-4 bg-gray-700 hover:bg-gray-600 rounded-lg">⬅️ Назад</button>
   </div>
 
@@ -88,20 +88,43 @@
       document.getElementById('menu').classList.remove('hidden');
     }
 
-    // Данные из Telegram WebApp
+    // Telegram WebApp
     window.Telegram.WebApp.ready();
     const user = window.Telegram.WebApp.initDataUnsafe?.user;
 
-    if (user) {
-      const fullName = user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name;
+    async function initProfile() {
+      let allowedDB = {};
 
+      try {
+        const response = await fetch('allowed.json'); // твой путь к allowed.json
+        allowedDB = await response.json();
+      } catch (e) {
+        console.error("Не удалось загрузить allowed.json", e);
+      }
+
+      if (!user) return;
+
+      const fullName = user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name;
+      const tg_id = user.id.toString();
+
+      // Заполняем данные
       document.getElementById('name').innerText = fullName || "Без имени";
       document.getElementById('username').innerText = user.username ? "@" + user.username : "Без юзернейма";
       document.getElementById('avatar').src = user.photo_url || "https://via.placeholder.com/50";
 
       document.getElementById('profile-name').innerText = fullName || "Без имени";
       document.getElementById('profile-username').innerText = user.username ? "@" + user.username : "Без юзернейма";
+
+      if (allowedDB[tg_id]) {
+        document.getElementById('gameid').innerText = "ID: " + allowedDB[tg_id];
+        document.getElementById('profile-gameid').innerText = allowedDB[tg_id];
+      } else {
+        document.getElementById('gameid').innerText = "ID: Не верифицирован";
+        document.getElementById('profile-gameid').innerText = "Не верифицирован";
+      }
     }
+
+    initProfile();
   </script>
 
 </body>
