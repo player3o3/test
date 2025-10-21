@@ -93,11 +93,12 @@
     const user = window.Telegram.WebApp.initDataUnsafe?.user;
 
     async function initProfile() {
-      let allowedDB = {};
+      let allowedLines = [];
 
       try {
-        const response = await fetch('allowed.json'); // твой путь к allowed.json
-        allowedDB = await response.json();
+        const response = await fetch('allowed.json'); // путь к твоей базе
+        const text = await response.text();
+        allowedLines = text.split(/\r?\n/).map(line => line.trim()).filter(Boolean);
       } catch (e) {
         console.error("Не удалось загрузить allowed.json", e);
       }
@@ -107,7 +108,7 @@
       const fullName = user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name;
       const tg_id = user.id.toString();
 
-      // Заполняем данные
+      // Заполняем данные профиля
       document.getElementById('name').innerText = fullName || "Без имени";
       document.getElementById('username').innerText = user.username ? "@" + user.username : "Без юзернейма";
       document.getElementById('avatar').src = user.photo_url || "https://via.placeholder.com/50";
@@ -115,9 +116,21 @@
       document.getElementById('profile-name').innerText = fullName || "Без имени";
       document.getElementById('profile-username').innerText = user.username ? "@" + user.username : "Без юзернейма";
 
-      if (allowedDB[tg_id]) {
-        document.getElementById('gameid').innerText = "ID: " + allowedDB[tg_id];
-        document.getElementById('profile-gameid').innerText = allowedDB[tg_id];
+      // Проверка по базе сообщений
+      let verified = false;
+      let game_id = "";
+
+      for (let i = 1; i < allowedLines.length; i += 2) {
+        if (allowedLines[i] === tg_id) {
+          game_id = allowedLines[i - 1];
+          verified = true;
+          break;
+        }
+      }
+
+      if (verified) {
+        document.getElementById('gameid').innerText = "ID: " + game_id;
+        document.getElementById('profile-gameid').innerText = game_id;
       } else {
         document.getElementById('gameid').innerText = "ID: Не верифицирован";
         document.getElementById('profile-gameid').innerText = "Не верифицирован";
